@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-<link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
     <title>Gify All The Gifs</title>
 </head>
 <body>
@@ -21,8 +20,8 @@
   <!-- Users will use this form to add new buttons -->
   <form>
     <div class="form-group">
-      <label for="newButtonTitle">Add a new button!</label>
-      <input type="string" class="form-control" id="newButtonInput" placeholder="You know you want to">
+      <label for="newButtonTitle">Add a new state button!</label>
+      <input type="string" class="form-control" id="newStateInput" placeholder="City, ST">
       <br>
       <button type="button" class="btn btn-primary">Yea!</button>
     </div>
@@ -30,10 +29,12 @@
   <hr>
   <!-- Gifs will be listed here -->
   <div id="gifDisplay" class="d-flex flex-wrap justify-content-around">
-
-  </div>
-
+    <div>
+      <p>Test image.</p>
+      <img src="https://media1.giphy.com/media/Q6InZK2c8Ywog/200_s.gif" class="cityImg">
+    </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src='logic.js'></script>
 </body>
 </html>
