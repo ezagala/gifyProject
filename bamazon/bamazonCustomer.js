@@ -11,54 +11,73 @@ var connection = mysql.createConnection({
     // Your password
     password: "root",
     database: "bamazon"
-  });
+});
 
-  connection.connect(function(err) {
+connection.connect(function(err) {
     if (err) throw err;
     console.log("connected as id " + connection.threadId);
     start(); 
-  });
+});
 
-  function start(){
+function start(){
+
+    console.log("\nWelcome to bamazon! Find our product catalog below: \n");
+
     // Return the entire products table 
-      connection.query('SELECT * FROM products', function(err, results){
-          if (err) throw err; 
-            // Loop through the results and build a list of available products. Build a choices array that the user will use inquirer to select from 
-            inquirer.prompt([
-                {
-                    name: 'productList', 
-                    type: 'list', 
-                    choices: function () {
-                        var choiceArry = [];
-                        results.map(function(x){
-                            choiceArry.push(`Item Id: ${x.itemID}; Product Name: ${x.productName}; Price: ${x.price}; Units left: ${x.stockQuantity}`)
-                        })
-                        return choiceArry; 
-                    },
-                    message: 'What product are you intersted in?'
-                },
-                {
-                    name: 'howMuch',
-                    type: 'input',
-                    message: 'How many units would you like to purchase?'
-                }
-            ]).then(function(res){
-                console.log(res);
-                if (results.stockQuantity === 0) {
-                    console.log('Insufficient quantity!')
-                    start(); 
-                } else {
-                    fulfull(res.howMuch); 
-                }
-            })
-      })
-  }
+    connection.query('SELECT * FROM products', function(err, results){
+        if (err) throw err; 
+        var choices = ''; 
+        results.map(function(x){
+            choices += (`Item Id: ${x.itemID}; Product Name: ${x.productName}; Price: ${x.price}; Units left: ${x.stockQuantity} \n`)
+        }) 
+        console.log(choices); 
+        whatProduct(); 
+    })
+}
 
-  function fulfull() {
-    // Update the products table to reflect the customers order 
+function whatProduct() {
+    inquirer.prompt([
+        {
+            name: 'whatProduct', 
+            type: 'input', 
+            message: 'What is the id of the product you would like to purchase?'
+        },
+        {
+            name: 'howMuch',
+            type: 'input',
+            message: 'How many units would you like to purchase?'
+        }
+    ]).then((res) => {
+        connection.query('SELECT * FROM products', (err, results) => {
+            if (err) throw err; 
+            results.forEach(element => {
+                if (parseInt(res.whatProduct) === element.itemID) {
+                    if (parseInt(res.howMuch) > element.stockQuantity) {
+                        console.log('Insufficient quantity!')
+                    } else {
+                        updateAndLog(element.stockQuantity, res.howMuch, element.itemID, element.price); 
+                    }
+                }
+            });
+        })
+    })   
+}
 
-    // Calculate and log the customers total 
-  }
+function updateAndLog(w, x, y, z) {
+    connection.query(
+        'UPDATE products SET ? WHERE ?', 
+        [{stockQuantity: w - x}, {itemID: y}],
+        err => {
+            if (err) throw err; 
+            let total = x * z
+            console.log("Your order total is " + total.toFixed(2)); 
+        }
+    )
+    connection.end(); 
+}
+
+  
+
 
   
 
